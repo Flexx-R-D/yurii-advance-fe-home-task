@@ -12,6 +12,13 @@ interface CreateAccountRequest {
   balance?: number;
 }
 
+interface MoveMoneyRequest {
+  source_account_id: string;
+  destination_account_id: string;
+  amount: number;
+  merchant?: string;
+}
+
 class FlexxApiService {
   private formatQueryParams(
     params?: Record<
@@ -53,6 +60,10 @@ class FlexxApiService {
       endpoint: `pages/accounts/${account_id}/transactions?${queryParams}`,
     });
   }
+
+  async moveMoney(body: MoveMoneyRequest): Promise<Transaction[]> {
+    return post<Transaction[]>({endpoint: 'pages/move-money', body});
+  }
 }
 
 let instance: FlexxApiService | null = null;
@@ -68,4 +79,4 @@ const flexxApiService = (): FlexxApiService => {
 export default flexxApiService;
 
 export {get, put, post, remove, FlexxApiService};
-export type {CreateAccountRequest};
+export type {MoveMoneyRequest, CreateAccountRequest};
